@@ -5,7 +5,6 @@ import http.client
 import json
 
 from flask import request
-from pip._vendor import requests
 
 app = Flask(__name__)
 
