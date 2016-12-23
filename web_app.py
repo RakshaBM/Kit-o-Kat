@@ -16,16 +16,14 @@ def login():
     domain = request.form['domain']
     username = request.form['username']
     password = request.form['password']
-    if ("%s" %(username)=="karthik.b@razorthink.net"):
-        headers = {
+  
+    headers = {
             'x-auth-password': "%s" % (password),
             'x-auth-domain': "%s" % (domain),
             'x-auth-username': "%s" % (username),
             'cache-control': "no-cache",
         }
-    else:
-        return render_template('login_error.html')
-        
+         
 
     conn.request("POST", "/rest/user/login", headers=headers)
     global token
