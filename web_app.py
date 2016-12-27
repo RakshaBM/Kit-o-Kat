@@ -81,9 +81,10 @@ def getAllCompanyUsers(new_token):
     j = json.loads(p)
     j1= j['entity']
     x = []
-    for index in range(len(j1)):
+       for index in range(len(j1)):
         j2 = j1[index]
-        x.append(j2['fname'])
+        if(j2['status']== 'activated'):
+            x.append(j2['fname'])
 
     pprint(j)
     return render_template('all_users.html', fullname=x)
