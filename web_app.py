@@ -5,6 +5,7 @@ import http.client
 import json
 
 from flask import request
+from pip._vendor import requests
 
 app = Flask(__name__)
 
@@ -16,14 +17,12 @@ def login():
     domain = request.form['domain']
     username = request.form['username']
     password = request.form['password']
-  
     headers = {
-            'x-auth-password': "%s" % (password),
-            'x-auth-domain': "%s" % (domain),
-            'x-auth-username': "%s" % (username),
-            'cache-control': "no-cache",
-        }
-         
+        'x-auth-password': "%s" % (password),
+        'x-auth-domain': "%s" % (domain),
+        'x-auth-username': "%s" % (username),
+        'cache-control': "no-cache",
+    }
 
     conn.request("POST", "/rest/user/login", headers=headers)
     global token
@@ -81,13 +80,14 @@ def getAllCompanyUsers(new_token):
     j = json.loads(p)
     j1= j['entity']
     x = []
-       for index in range(len(j1)):
+    userId = []
+    for index in range(len(j1)):
         j2 = j1[index]
-        if(j2['status']== 'activated'):
-            x.append(j2['fname'])
+        x.append(j2['fname'])
+        userId.append(j2['userId'])
 
     pprint(j)
-    return render_template('all_users.html', fullname=x)
+    return render_template('all_users.html', details=zip(x,userId))
 
 
 
