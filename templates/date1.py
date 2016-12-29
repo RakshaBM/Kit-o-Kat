@@ -1,62 +1,41 @@
-def datef(flag1):
-    import datetime,time
+def datef(flag):
+    from datetime import datetime, timedelta
     t=time.time()
-    flag=1
-    d_sec= str(datetime.datetime.fromtimestamp(t))
-    d_for = datetime.datetime.strptime(d_sec, "%Y-%m-%d %H:%M:%S.%f")
-    dd=d_for.day
-    dm=d_for.month
-    dy=d_for.year
-    dm1=dm
-    global dd1
-    global dy1
-    dy1=dy
+    N1=1
+    N2=7
+    d_for=datetime.now()
+    dd=datetime.datetime.strptime(d_for, "%Y-%m-%d %H:%M:%S.%f")
     if(flag==1):
-        dd1=dd-7
-    else:
-        dd1=dd-1
-    if(dd1==0):
-        dm1=dm-1
-        if(dm1==0):
-            dd1=31
-            dm1=12
-            dy1=dy-1
-        else:
-            if ((dm1 == 1) | (dm1 == 3) | (dm1 == 5) | (dm1 == 7) | (dm1 == 8) | (dm1 == 10) | (dm1 == 12)):
-                dd1= 31
-            else:
-                if (dm1 == 2):
-                    a=dy1%100
-                    print(a)
-                    if (dy1%4==0|(dy1 % 400 == 0 &  dy1 % 100 != 0)):
-                        dd1 =29
-                    else:
-                        dd1 =28
-                else:
-                    dd1 =30
-    elif(dd1<0):
-        dm1=dm-1
-        if(dm1==0):
-            dm1=12
-            dy1=dy1-1
-        if((dm1==1)|(dm1==3)|(dm1==5)|(dm1==7)|(dm1==8)|(dm1==10)|(dm1==12)):
-                dd1=dd1+31
-        elif(dm1==2):
-                if (dy1 % 4 == 0 | (dy1 % 400 == 0 & dy1 % 100 != 0)):
-                    dd1=dd1+29
-                else:
-                    dd1=dd1+28
-        else:
-            dd1=dd1+30
-    dt=datetime.datetime(dy1,dm1,dd1,0,0)
+        d_for=datetime.now() - timedelta(days=N2)
+         dd1= datetime.datetime.strptime(d_for, "%Y-%m-%d %H:%M:%S.%f")
+    elif(flag==0):
+        d_for=datetime.now() - timedelta(days=N1)
+        dd1 = datetime.datetime.strptime(d_for, "%Y-%m-%d %H:%M:%S.%f")
+    elif(flag==2):
+        d_for = datetime.now() + timedelta(days=N2)
+        dd1 = datetime.datetime.strptime(d_for, "%Y-%m-%d %H:%M:%S.%f")
+    dt=datetime.datetime(dd.year,dd.month,dd.day,0,0)
     s=time.mktime(dt.timetuple())
     a=int(s)
     x=[]
     long_time= a*1000
     x.append(long_time)
-    dt=datetime.datetime(dy,dm,dd,0,0)
-    s=time.mktime(dt.timetuple())
+    print(x[0])
     a=int(s)
     long_time= a*1000
     x.append(long_time)
+    print(x[1])t.timetuple())
+    a=int(s)
+    x=[]
+    long_time= a*1000
+    x.append(long_time)
+    print(x[0])
+    a=int(s)
+    long_time= a*1000
+    x.append(long_time)
+    print(x[1])
+    if((flag==1) | (flag==2))
+        temp=x[0]
+        x[0]=x[1]
+        x[1]=temp
     return (x)
