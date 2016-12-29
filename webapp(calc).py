@@ -3,7 +3,7 @@ from pprint import pprint
 from flask import Flask, render_template, redirect, url_for
 import http.client
 import json
-
+import datetime, timedelta
 from flask import request
 
 
@@ -86,22 +86,21 @@ def getAllCompanyUsers(new_token):
         y.append(j2['fname'])
         userId.append(j2['userId'])
 
-    pprint(j)
     return render_template('all_users.html', details=zip(y,userId))
 
 
 #day=0 week=1
-#1-not started, 2=completed, 3=inprogress, 4=on hold, 5=stuck
+#1-not started, 2=completed, 3=inprogress, 4=on hold, 5=stuck 6=completion rate 7=max 8=estimated hours
 @app.route('/dashboardTasks',methods = ['POST', 'GET'])
 def dashboardTasks():
     id=request.args.get('userid')
     i=0
-    x=[[0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
+    global x
+    x=[[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]]
     while(i<2):
         a=datef(i)
         ed=a[1]
         sd=a[0]
-
         pprint(i)
         payload = "{\n\t\"endDate\" : \"%s\",\n\t\"offsetHour\":\"5\",\n\t\"isReport\":\"true\",\n\t\"offsetMinute\" : \"30\",\n\t\"pageNumber\" : \"0\",\n\t\"pageSize\" : \"5\",\n\t\"startDate\":\"%s\",\n\t\"userId\" : \"%s\"\n}" % (ed,sd,id)
         headers = {
@@ -109,37 +108,44 @@ def dashboardTasks():
             'x-auth-token': "7882be71-53bd-429e-bb6c-8bd983323d8a"
         }
         conn.request("POST", "/rest/dashboard/dashboardTasks", payload, headers)
-
         res = conn.getresponse()
         data = res.read()
         h=data.decode("utf-8")
         l = json.loads(h)
         #pprint(l)
+        pprint("end date")
+        pprint(ed)
+        pprint("start date")
+        pprint(sd)
         k=l['entity']
         #pprint(k)
         j=k['taskStatus']
-       # pprint(j)
-
+        t=j['totalEstimationTime']
+        a=0
         if 'In Progress' in j:
             x[i][3] = j['In Progress']
-
+            a+=x[i][3]
         if 'Completed' in j:
             x[i][2] = j['Completed']
-
+            a+=x[i][2]
         if 'On Hold' in j:
             x[i][4] = j['On Hold']
-
+            a += x[i][4]
         if 'Stuck' in j:
             x[i][5] = j['Stuck']
-
+            a += x[i][5]
         if 'Not Started' in j:
             x[i][1] = j['Not Started']
+            a += x[i][1]
+        x[i][6]=0.0
+        x[i][6]=(x[i][2]/a)*100
+        x[i][7]=a
+        x[i][8]=(t/3600000)
+        pprint(t)
         i+=1
-        pprint(ed)
-        pprint(sd)
-        #pprint("array")
-        #pprint(x[1][5])
-    return render_template('tasks.html', ar=x)
+
+    return render_template('graph.html', ar=x)
+
 def datef(flag):
     import datetime,time
     t=time.time()
@@ -155,7 +161,7 @@ def datef(flag):
     if(flag==1):
         dd1=dd-7
     else:
-        dd1=dd+1
+        dd1=dd-1
     if(dd1==0):
         dm1=dm-1
         if(dm1==0):
@@ -183,7 +189,7 @@ def datef(flag):
         if((dm1==1)|(dm1==3)|(dm1==5)|(dm1==7)|(dm1==8)|(dm1==10)|(dm1==12)):
                 dd1=dd1+31
         elif(dm1==2):
-                if (dy1 % 4 == 0 | (dy1 % 400 == 0 & dy1 % 100 != 0)):
+                if ((dy1 % 4 == 0 )| (dy1 % 400 == 0 & dy1 % 100 != 0)):
                     dd1=dd1+29
                 else:
                     dd1=dd1+28
@@ -201,6 +207,19 @@ def datef(flag):
     long_time= a*1000
     x.append(long_time)
     return (x)
+@app.route('/efficiency')
+def graph():
+    return render_template('efficiency.html', ar=x)
+@app.route('/due')
+def due():
+    return render_template('due.html', ar=x)
+@app.route('/taskstatus')
+def taskstatus():
+    return render_template('taskstatus.html', ar=x)
+@app.route('/assigned')
+def assigned():
+    return render_template('assignedwl.html', ar=x)
+
 
 if __name__ == '__main__':
    app.run(debug = True)
