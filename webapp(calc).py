@@ -83,8 +83,9 @@ def getAllCompanyUsers(new_token):
     userId = []
     for index in range(len(j1)):
         j2 = j1[index]
-        y.append(j2['fname'])
-        userId.append(j2['userId'])
+        if(j2['status']=='activated'):
+            y.append(j2['fname'])
+            userId.append(j2['userId'])
 
     return render_template('all_users.html', details=zip(y,userId))
 
