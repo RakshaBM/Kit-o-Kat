@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <title>Title</title>
-  <!--<frameset rows="10%,90%">
-        <frame src="due-top.html" frameborder="0">
-        <frame src="due-bottom.html" frameborder="0">
-    </frameset>-->
+   <!-- <frameset rows="10%,90%">
+        <frame src="awl-top.html" frameborder="0">
+        <frame src="awl-bottom.html" frameborder="0">
+    </frameset> -->
     <style type="text/css">
         div{
             padding-left: 10%;
@@ -28,7 +28,7 @@
         }
         h2{
             padding-left: 40%;
-            color: green;
+
         }
         h1{
             padding-left: 30%;
@@ -50,14 +50,17 @@
 <body>
 <button onclick="logout()">Log out</button>
 <h1 class="w3-text-green">razorthinkuniversity/swetha</h1>
-<ul class="w3-navbar w3-border w3-greys w3-center">
-    <li style="width:20%"><a class="w3-hover-none w3-text-white"  href="due.html">Due Date</a></li>
-    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="assignedwl.html">Assigned workload</a></li>
+<ul class="w3-navbar w3-border w3-grey w3-center">
+    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="due.html">Due Date</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-white" href="assignedwl.html">Assigned workload</a></li>
     <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="taskstatus.html">Task status</a></li>
     <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="efficiency.html">Efficiency</a></li>
 </ul>
-<h2 class="w3-text-red">DAY</h2>
+<h2 class="w3-text-purple">DAY</h2>
+</br>
+</br>
 
+</br>
 <div id="designerChart"></div>
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
@@ -66,7 +69,7 @@
 
         function setColumnBarColors(colors, chartContainer) {
 
-            $('#' + chartContainer + ' .c3-chart-bars .c3-shape').each(function(index) {
+            $('#' + chartContainer + ' .c3-chart-bars .c3-shape ').each(function(index) {
                 this.style.cssText += 'fill: ' + colors[index] + ' !important; stroke: ' + colors[index] + '; !important';
             });
 
@@ -79,25 +82,27 @@
             bindto: '#designerChart',
             data: {
                 columns: [
-                    ['Tasks', 2, 1, 5,3, 4]
+                    ['Tasks', 3, 2, 3, 4, 2]
                 ],
                 type: 'bar'
+
             },
             axis: {
                 x: {
                     label: {
-                        text: 'Days',
+                        text: 'Users',
                         position: 'outer-center',
+
                     },
                     type: 'category',
-                    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                    categories: ['Swetha', 'Raksha', 'Sushmitha', 'Amit', 'Anto'],
                     tick: {
                         centered: true
                     }
                 },
                 y: {
                     label: {
-                        text: 'Tasks [number]',
+                        text: 'Hours',
                         position: 'outer-middle'
                     },
                     max: 10,
@@ -112,6 +117,7 @@
                 show: false
             }
         });
+
         setColumnBarColors(columnColors, 'designerChart');
 
         // Color turns to original when window is resized
@@ -122,13 +128,11 @@
     });
 </script>
 <hr>
-<h2 class="w3-text-red">WEEK</h2>
-<div id="new_graph">
-</div>
-
+<h2 class="w3-text-purple">WEEK</h2>
+<div id="awl-week"></div>
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-
+        axiscolors = ['white','white'];
         columnColors = ['#9a4d6f', '#c76c47', 'brown', '#d9b099', '#d4ba2f'];
 
         function setColumnBarColors(colors, chartContainer) {
@@ -143,28 +147,28 @@
         }
 
         var chart = c3.generate({
-            bindto: '#new_graph',
+            bindto: '#awl-week',
             data: {
                 columns: [
-                    ['Tasks', 2, 1, 5,3, 4]
+                    ['Hours', 3, 2, 3, 4, 2]
                 ],
                 type: 'bar'
             },
             axis: {
                 x: {
                     label: {
-                        text: 'Days',
+                        text: 'Users',
                         position: 'outer-center',
                     },
                     type: 'category',
-                    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                    categories: ['Swetha', 'Raksha', 'Sushmitha', 'Amit', 'Anto'],
                     tick: {
                         centered: true
                     }
                 },
                 y: {
                     label: {
-                        text: 'Tasks [number]',
+                        text: 'Hours',
                         position: 'outer-middle'
                     },
                     max: 10,
@@ -179,12 +183,14 @@
                 show: false
             }
         });
-        setColumnBarColors(columnColors, 'new_graph');
+
+        setColumnBarColors(columnColors, 'awl-week');
+        setaxisColors(axiscolors, 'awl-week');
 
         // Color turns to original when window is resized
         // To handle that
         $(window).resize(function() {
-            setColumnBarColors(columnColors, 'new_graph');
+            setColumnBarColors(columnColors, 'awl-week');
         });
     });
 </script>
