@@ -15,9 +15,7 @@
     }
     h2{
         padding-left:40%;
-
     }
-
     body {
         background: url(https://dl.dropboxusercontent.com/u/159328383/background.jpg) no-repeat center center fixed;
         -webkit-background-size: cover;
@@ -34,23 +32,21 @@
     ul{
         opacity: 0.9;
     }
-
 </style>
     <script type="text/javascript">
         function logout() {
             window.location = "login.html"
-
         }
     </script>
 </head>
 <body>
 <button onclick="logout()">Log out</button>
-<h1 class="w3-text-green">razorthinkuniversity/swetha</h1>
+<!--<h1 class="w3-text-green">razorthinkuniversity/swetha</h1> -->
 <ul class="w3-navbar w3-border w3-grey w3-center">
-    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="due.html">Due Date</a></li>
-    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="assignedwl.html">Assigned workload</a></li>
-    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="taskstatus.html">Task status</a></li>
-    <li style="width:20%"><a class="w3-hover-none w3-text-white" href="efficiency.html">Efficiency</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="/due">Due Date</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="/assigned">Assigned workload</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="/taskstatus">Task status</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-white" href="/efficiency">Efficiency</a></li>
 </ul>
 </br>
 </br>
@@ -58,8 +54,8 @@
 <h2 class="w3-text-red">DAY</h2>
 <!--<div class="w3-container"> -->
     <div class="w3-progress-container ">
-        <div class="w3-progressbar w3-round-xlarge w3-blue" style="width:60%">
-            <div class="w3-center w3-text-white">60%</div>
+        <div class="w3-progressbar w3-round-xlarge w3-grey" style="width:{{ar[0][8]}}%">
+            <div class="w3-center w3-text-white">{{ar[0][8]}}%</div>
         </div>
     </div><br>
 </br>
@@ -68,8 +64,8 @@
 </br>
 <h2 class="w3-text-red">WEEK</h2>
    <div class="w3-progress-container">
-        <div class="w3-progressbar w3-round-xlarge w3-purple" style="width:50%">
-            <div class="w3-center w3-text-white">50%</div>
+        <div class="w3-progressbar w3-round-xlarge w3-purple" style="width:{{ar[1][8]}}%">
+            <div class="w3-center w3-text-white">{{ar[1][8]}}%</div>
         </div>
     </div><br>
 </body>
