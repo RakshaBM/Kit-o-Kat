@@ -37,36 +37,6 @@ def login():
     else:
         return render_template('login_error.html')
 
-
-
-
-@app.route('/getLoggedInUser')
-def authen():
-   # username = request.form['username']
-    #password = request.form['password']
-   # domain = request.form['domain']
-    header = {
-        'content-type': "application/json",
-        'x-auth-token': "7882be71-53bd-429e-bb6c-8bd983323d8a"
-    }
-    conn.request("GET", "/rest/user/getLoggedInUser", headers=header)
-    res = conn.getresponse()
-    data = res.read()
-    return (data)
-
-
-@app.route('/work_stream')
-def work_stream():
-    header = {
-        'content-type': "application/json",
-        'x-auth-token': "7882be71-53bd-429e-bb6c-8bd983323d8a"
-    }
-    conn.request("GET", "/rest/workstream/getWorkStream", headers=header)
-    res = conn.getresponse()
-    data = res.read()
-    return (data)
-
-
 @app.route('/getAllCompanyUsers/<new_token>')
 def getAllCompanyUsers(new_token):
     header = {
