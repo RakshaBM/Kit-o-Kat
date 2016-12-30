@@ -1,0 +1,131 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+<link href="https://rawgit.com/masayuki0812/c3/master/c3.css" rel="stylesheet" />
+<script src="https://rawgit.com/masayuki0812/c3/master/c3.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <title>Title</title>
+    <!-- <frameset rows="10%,90%">
+         <frame src="awl-top.html" frameborder="0">
+         <frame src="awl-bottom.html" frameborder="0">
+     </frameset> -->
+    <style type="text/css">
+        div{
+            padding-left: 10%;
+            color: white;
+            width: 70%;
+        }
+
+        body {
+            background: url(https://dl.dropboxusercontent.com/u/159328383/background.jpg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        h2{
+            padding-left: 40%;
+
+        }
+        h1{
+            padding-left: 30%;
+        }
+        button{
+            float: right;
+        }
+        ul{
+            opacity: 0.9;
+        }
+    </style>
+    <script type="text/javascript">
+        function logout() {
+            window.location = "login.html"
+
+        }
+    </script>
+</head>
+<body>
+<button onclick="logout()">Log out</button>
+<!-- <h1 class="w3-text-green">razorthinkuniversity/swetha</h1> -->
+<ul class="w3-navbar w3-border w3-grey w3-center">
+    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="/due">Due Date</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-white" href="/assigned">Assigned workload</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="/taskstatus">Task status</a></li>
+    <li style="width:20%"><a class="w3-hover-none w3-text-grey w3-hover-text-white" href="/efficiency">Efficiency</a></li>
+</ul>
+<h2 class="w3-text-purple">DAY</h2>
+</br>
+</br>
+
+</br>
+<div id="designerChart"></div>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+
+        columnColors = ['#9a4d6f', '#c76c47', 'brown', '#d9b099', '#d4ba2f'];
+
+        function setColumnBarColors(colors, chartContainer) {
+
+            $('#' + chartContainer + ' .c3-chart-bars .c3-shape ').each(function(index) {
+                this.style.cssText += 'fill: ' + colors[index] + ' !important; stroke: ' + colors[index] + '; !important';
+            });
+
+            $('#' + chartContainer + ' .c3-chart-texts .c3-text').each(function(index) {
+                this.style.cssText += 'fill: ' + colors[index] + ' !important;';
+            });
+        }
+
+        var chart = c3.generate({
+            bindto: '#designerChart',
+            data: {
+                columns: [
+                    ['Tasks', {{ar[0][8]}}, {{ar[1][8]}}]
+                ],
+                type: 'bar'
+
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: 'Workload',
+                        position: 'outer-center',
+
+                    },
+                    type: 'category',
+                    categories: ['Today', 'Week'],
+                    tick: {
+                        centered: true
+                    }
+                },
+                y: {
+                    label: {
+                        text: 'Hours',
+                        position: 'outer-middle'
+                    },
+                    max: 45,
+                    min: 0,
+                    padding: {
+                        top: 0,
+                        bottom: 0
+                    }
+                }
+            },
+            legend: {
+                show: false
+            }
+        });
+
+        setColumnBarColors(columnColors, 'designerChart');
+
+        // Color turns to original when window is resized
+        // To handle that
+        $(window).resize(function() {
+            setColumnBarColors(columnColors, 'designerChart');
+        });
+    });
+</script>
+</body>
+</html>
