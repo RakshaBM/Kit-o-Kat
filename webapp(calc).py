@@ -33,12 +33,12 @@ def login():
     #print(res.headers)
     if 'Ok' in p:
         token = "7882be71-53bd-429e-bb6c-8bd983323d8a"
-        return redirect(url_for('getAllCompanyUsers', new_token=token))
+        return redirect(url_for('getAllCompanyUsers'))
     else:
         return render_template('login_error.html')
 
-@app.route('/getAllCompanyUsers/<new_token>')
-def getAllCompanyUsers(new_token):
+@app.route('/getAllCompanyUsers')
+def getAllCompanyUsers():
     header = {
         'x-auth-token': "7882be71-53bd-429e-bb6c-8bd983323d8a",
         'content-type': "application/json"
@@ -53,25 +53,25 @@ def getAllCompanyUsers(new_token):
     userId = []
     for index in range(len(j1)):
         j2 = j1[index]
-        if(j2['status']=='activated'):
+        if (j2['status'] == 'activated'):
             y.append(j2['fname'])
             userId.append(j2['userId'])
 
     return render_template('all_users.html', details=zip(y,userId))
-#dashboardTasks accesses all the tasks of a user and calculates the necessary data
 
+global x
 #day=0 week=1
 #1-not started, 2=completed, 3=inprogress, 4=on hold, 5=stuck 6=completion rate 7=max 8=estimated hours
 @app.route('/dashboardTasks',methods = ['POST', 'GET'])
 def dashboardTasks():
-    id=request.args.get('userid') #userid of the selected user
-    i=0
-    global x #x two dimensional array which stores all the data that are passed to html files
+    id=request.args.get('userid')
+    i=1
+    global x
     x=[[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]]
-    while(i<2):
+    while(i>=0):
         a=datef(i)
-        ed=a[1] #end date
-        sd=a[0] #start date
+        ed=a[1]
+        sd=a[0]
         pprint(i)
         payload = "{\n\t\"endDate\" : \"%s\",\n\t\"offsetHour\":\"5\",\n\t\"isReport\":\"true\",\n\t\"offsetMinute\" : \"30\",\n\t\"pageNumber\" : \"0\",\n\t\"pageSize\" : \"5\",\n\t\"startDate\":\"%s\",\n\t\"userId\" : \"%s\"\n}" % (ed,sd,id)
         headers = {
@@ -84,6 +84,10 @@ def dashboardTasks():
         h=data.decode("utf-8")
         l = json.loads(h)
         #pprint(l)
+        #pprint("end date")
+        #pprint(ed)
+        #pprint("start date")
+        #pprint(sd)
         if(l['status'] == 400):
             i -= 1
             pprint("in none")
