@@ -1,3 +1,6 @@
 Master branch
 ----Dev branch
 	--- Tasks
+important indices
+#day=0 week=1
+#1-not started, 2=completed, 3=inprogress, 4=on hold, 5=stuck 6=completion rate 7=max 8=estimated hours
