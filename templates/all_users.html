@@ -13,7 +13,6 @@
             margin-bottom: 50px;
             background: none;
         }
-
         .full {
             background: url(https://dl.dropboxusercontent.com/u/159328383/background.jpg) no-repeat center center fixed;
             -webkit-background-size: cover;
@@ -21,26 +20,16 @@
               -o-background-size: cover;
             background-size: cover;
         }
-
       .jumbotron {
-            margin-top: 25px;
             opacity: 0.7;
         }
-
   .list-group-item {
             opacity: 0.7;
             }
-
     </style>
    </head>
 <body>
 
-     <div class="container">
-        <div class="text-right">
-            <button type="button" class="btn btn-primary">Logout</button>
-            <br/>
-        </div>
-        </div>
 
     <div class="container">
         <div class="jumbotron">
@@ -51,8 +40,8 @@
 
     <div class="container">
         <ul class="list-group">
-            {% for name in fullname %}
-            <a href="#" class="list-group-item">{{name}}</a>
+            {% for name,userid in details %}
+            <a href="/dashboardTasks?userid={{userid}}" class="list-group-item">{{name}}</a>
             {% endfor %}
         </ul>
     </div>
