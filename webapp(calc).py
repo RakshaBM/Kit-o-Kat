@@ -84,37 +84,39 @@ def dashboardTasks():
         h=data.decode("utf-8")
         l = json.loads(h)
         #pprint(l)
-        pprint("end date")
-        pprint(ed)
-        pprint("start date")
-        pprint(sd)
-        k=l['entity']
-        #pprint(k)
-        j=k['taskStatus']
-        t=j['totalEstimationTime']
-        a=0
-        if 'In Progress' in j:
-            x[i][3] = j['In Progress']
-            a+=x[i][3]
-        if 'Completed' in j:
-            x[i][2] = j['Completed']
-            a+=x[i][2]
-        if 'On Hold' in j:
-            x[i][4] = j['On Hold']
-            a += x[i][4]
-        if 'Stuck' in j:
-            x[i][5] = j['Stuck']
-            a += x[i][5]
-        if 'Not Started' in j:
-            x[i][1] = j['Not Started']
-            a += x[i][1]
-        x[i][6]=0.0
-        x[i][6]=(x[i][2]/a)*100
-        x[i][7]=a
-        x[i][8]=(t/3600000)
-        pprint(t)
-        i+=1
-
+        if(l['status'] == 400):
+            i -= 1
+            pprint("in none")
+            pprint(i)
+            return render_template('graph.html', ar=x)
+        else:
+            pprint("else")
+            pprint(i)
+            k = l['entity']
+            pprint(l)
+            j = k['taskStatus']
+            t = j['totalEstimationTime']
+            a = 0
+            if 'In Progress' in j:
+                x[i][3] = j['In Progress']
+                a += x[i][3]
+            if 'Completed' in j:
+                x[i][2] = j['Completed']
+                a += x[i][2]
+            if 'On Hold' in j:
+                x[i][4] = j['On Hold']
+                a += x[i][4]
+            if 'Stuck' in j:
+                x[i][5] = j['Stuck']
+                a += x[i][5]
+            if 'Not Started' in j:
+                x[i][1] = j['Not Started']
+                a += x[i][1]
+            x[i][6] = 0.0
+            x[i][6] = (x[i][2] / a) * 100
+            x[i][7] = a
+            x[i][8] = (t / 3600000)
+            i -= 1
     return render_template('graph.html', ar=x)
 
 def datef(flag):
