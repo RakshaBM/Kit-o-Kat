@@ -3,8 +3,8 @@ from pprint import pprint
 from flask import Flask, render_template, redirect, url_for
 import http.client
 import json
-import datetime, timedelta
 from flask import request
+import time
 
 
 app = Flask(__name__)
@@ -12,6 +12,7 @@ app = Flask(__name__)
 conn = http.client.HTTPConnection("razorthinkuniversity.kickassteam.biz")
 token='null'
 
+global x
 @app.route('/login',methods = ['POST', 'GET'])
 def login():
     domain = request.form['domain']
@@ -37,6 +38,7 @@ def login():
     else:
         return render_template('login_error.html')
 
+
 @app.route('/getAllCompanyUsers')
 def getAllCompanyUsers():
     header = {
@@ -61,19 +63,25 @@ def getAllCompanyUsers():
 
 global x
 #day=0 week=1
-#1-not started, 2=completed, 3=inprogress, 4=on hold, 5=stuck 6=completion rate 7=max 8=estimated hours
+#1-not started, 2=completed, 3=inprogress, 4=on hold, 5=stuck 6=completion rate 7=max 8=estimated hours 9=duedate
 @app.route('/dashboardTasks',methods = ['POST', 'GET'])
 def dashboardTasks():
     id=request.args.get('userid')
-    i=1
+    i=2
     global x
-    x=[[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]]
+    x=[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
     while(i>=0):
         a=datef(i)
         ed=a[1]
         sd=a[0]
-        pprint(i)
-        payload = "{\n\t\"endDate\" : \"%s\",\n\t\"offsetHour\":\"5\",\n\t\"isReport\":\"true\",\n\t\"offsetMinute\" : \"30\",\n\t\"pageNumber\" : \"0\",\n\t\"pageSize\" : \"5\",\n\t\"startDate\":\"%s\",\n\t\"userId\" : \"%s\"\n}" % (ed,sd,id)
+        if i == 2:
+            sd="2016-12-01"
+            a=datef(1)
+            ed="2016-12-28"
+            pprint(ed)
+
+
+        payload = "{\n\t\"endDate\" : \"%s\",\n\t\"offsetHour\":\"5\",\n\t\"isReport\":\"true\",\n\t\"offsetMinute\" : \"30\",\n\t\"reportEndDate\" : \"%s\",\n\t\"reportStartDate\" : \"%s\",\n\t\"startDate\":\"%s\",\n\t\"userId\" : \"%s\"\n}" % (ed,ed,sd,sd,id)
         headers = {
             'content-type': "application/json",
             'x-auth-token': "7882be71-53bd-429e-bb6c-8bd983323d8a"
@@ -83,107 +91,129 @@ def dashboardTasks():
         data = res.read()
         h=data.decode("utf-8")
         l = json.loads(h)
-        #pprint(l)
-        #pprint("end date")
-        #pprint(ed)
-        #pprint("start date")
-        #pprint(sd)
         if(l['status'] == 400):
             i -= 1
-            pprint("in none")
             pprint(i)
+            pprint("Null error")
+
+            '''pprint(x[0])
+            pprint(x[1])'''
             return render_template('graph.html', ar=x)
         else:
-            pprint("else")
-            pprint(i)
             k = l['entity']
-            pprint(l)
-            j = k['taskStatus']
-            t = j['totalEstimationTime']
-            a = 0
-            if 'In Progress' in j:
-                x[i][3] = j['In Progress']
-                a += x[i][3]
-            if 'Completed' in j:
-                x[i][2] = j['Completed']
-                a += x[i][2]
-            if 'On Hold' in j:
-                x[i][4] = j['On Hold']
-                a += x[i][4]
-            if 'Stuck' in j:
-                x[i][5] = j['Stuck']
-                a += x[i][5]
-            if 'Not Started' in j:
-                x[i][1] = j['Not Started']
-                a += x[i][1]
-            x[i][6] = 0.0
-            x[i][6] = (x[i][2] / a) * 100
-            x[i][7] = a
-            x[i][8] = (t / 3600000)
-            i -= 1
+            ''' pprint("else part")
+            pprint(i)'''
+            if i == 2:
+                x = dueD(k)
+                pprint("after due")
+                pprint(x[1][9])
+            else:
+                x = calc(k, i)
+                '''pprint("dfdsfdfdaf")
+                pprint(x[0][9])
+                pprint(x[1][9])'''
+        i -= 1
     return render_template('graph.html', ar=x)
 
+
 def datef(flag):
-    import datetime,time
-    t=time.time()
-    d_sec= str(datetime.datetime.fromtimestamp(t))
-    d_for = datetime.datetime.strptime(d_sec, "%Y-%m-%d %H:%M:%S.%f")
-    dd=d_for.day
-    dm=d_for.month
-    dy=d_for.year
-    dm1=dm
-    global dd1
-    global dy1
-    dy1=dy
-    if(flag==1):
-        dd1=dd-7
-    else:
-        dd1=dd-1
-    if(dd1==0):
-        dm1=dm-1
-        if(dm1==0):
-            dd1=31
-            dm1=12
-            dy1=dy-1
-        else:
-            if ((dm1 == 1) | (dm1 == 3) | (dm1 == 5) | (dm1 == 7) | (dm1 == 8) | (dm1 == 10) | (dm1 == 12)):
-                dd1= 31
-            else:
-                if (dm1 == 2):
-                    a=dy1%100
-                    print(a)
-                    if (dy1%4==0|(dy1 % 400 == 0 &  dy1 % 100 != 0)):
-                        dd1 =29
-                    else:
-                        dd1 =28
-                else:
-                    dd1 =30
-    elif(dd1<0):
-        dm1=dm-1
-        if(dm1==0):
-            dm1=12
-            dy1=dy1-1
-        if((dm1==1)|(dm1==3)|(dm1==5)|(dm1==7)|(dm1==8)|(dm1==10)|(dm1==12)):
-                dd1=dd1+31
-        elif(dm1==2):
-                if ((dy1 % 4 == 0 )| (dy1 % 400 == 0 & dy1 % 100 != 0)):
-                    dd1=dd1+29
-                else:
-                    dd1=dd1+28
-        else:
-            dd1=dd1+30
-    dt=datetime.datetime(dy1,dm1,dd1,0,0)
-    s=time.mktime(dt.timetuple())
-    a=int(s)
-    x=[]
-    long_time= a*1000
-    x.append(long_time)
-    dt=datetime.datetime(dy,dm,dd,0,0)
-    s=time.mktime(dt.timetuple())
-    a=int(s)
-    long_time= a*1000
-    x.append(long_time)
-    return (x)
+    from datetime import datetime,timedelta
+    today=datetime.now()
+    if(flag==0):
+        date_N_days_ago = datetime.now() - timedelta(days=1)
+    elif(flag==1):
+        date_N_days_ago = datetime.now() - timedelta(days=7)
+    elif(flag==2):
+        date_N_days_ago = datetime.now() + timedelta(days=7)
+        year, month, day = today.strftime("%Y,%m,%d").split(',')
+        #print(year, month, day)
+        dt = datetime(int(year), int(month), int(day), 0, 0)
+        s = time.mktime(dt.timetuple())
+        a = int(s)
+        f = []
+        f.append(a * 1000)
+        year, month, day = date_N_days_ago.strftime("%Y,%m,%d").split(',')
+        dt = datetime(int(year), int(month), int(day), 0, 0)
+        s = time.mktime(dt.timetuple())
+        a = int(s)
+        f.append(a * 1000)
+        return f
+    elif(flag==3):
+        date_N_days_ago = datetime.now() + timedelta(days=1)
+    date1,time1= str(date_N_days_ago).split(' ')
+    date2,time2= str(today).split(' ')
+    x = []
+    x.append(date1)
+    x.append(date2)
+    if((flag==2)|(flag==3)):
+        temp=x[0]
+        x[0]=x[1]
+        x[1]=temp
+    return(x)
+
+
+def calc(k,i):
+    j = k['taskStatus']
+    t = j['totalEstimationTime']
+    a = 0
+    if 'In Progress' in j:
+        x[i][3] = j['In Progress']
+        a += x[i][3]
+    if 'Completed' in j:
+        x[i][2] = j['Completed']
+        a += x[i][2]
+    if 'On Hold' in j:
+        x[i][4] = j['On Hold']
+        a += x[i][4]
+    if 'Stuck' in j:
+        x[i][5] = j['Stuck']
+        a += x[i][5]
+    if 'Not Started' in j:
+        x[i][1] = j['Not Started']
+        a += x[i][1]
+    x[i][6] = 0.0
+    x[i][6] = (x[i][2] / a) * 100
+    x[i][7] = a
+    x[i][8] = (t / 3600000)
+    #pprint("calc end")
+
+    return x
+
+
+def dueD(k):
+    a = k['taskPropertyBean']
+    c = ct = 0 # c stores tasks that are due today, ct stores tasks that are due this week
+    pprint("hello in dueD")
+    # pprint(range(len(a)))
+    x[0][9]=x[1][9]=0
+    for index in range(len(a)):
+        j2 = a[index]
+        d = datef(2)
+        d7 = d[1]
+        d0 = d[0]
+        dd=j2['dueDate']
+        #pprint(dd)
+        if dd <= d7 & dd >= d0: # condition for week's due dates
+            c += 1
+            pprint("today")
+            pprint(j2['title'])
+       # pprint("one if done")
+        if dd == d0:
+            ct += 1
+            pprint("week")
+            pprint(j2['title'])
+    #pprint(dd)
+    pprint(d7)
+    pprint(d0)
+    x[0][9] = c
+    x[1][9] = ct
+    pprint("dueD")
+    pprint(x[0][9])
+    pprint(x[1][9])
+    pprint("dueD end")
+    return x
+
+
 @app.route('/efficiency')
 def graph():
     return render_template('efficiency.html', ar=x)
