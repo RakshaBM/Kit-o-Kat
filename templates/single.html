@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta http-equiv="refresh" content="60">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="single.css">
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+// Check browser support
+if (typeof(Storage) !== "undefined") {
+if(localStorage.getItem("loginStatus")=="active"){
+
+}
+else
+{
+window.location="/dashboardTasks";
+
+localStorage.setItem("loginStatus", "active");
+}
+} else {
+    document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+}
+//localStorage.loginStatus="active"
+function myFunction() {
+localStorage.loginStatus="inactive";
+ window.location="/logout";
+}
+</script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {
+    $(".dropdown-toggle").dropdown();
+});
+
+     
+       function duedate(event) {
+            event && event.preventDefault();
+            $(function () {
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Due date'
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: [
+                            'Days',
+                        ],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Tasks'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} tasks</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Today',
+                        data: [{{ar[0][9]}}]
+                    }, {
+                        name: 'Week',
+                        data: [{{ar[1][9]}}]
+                    }]
+                });
+            });
+        }
+        function Workload(event) {
+            event && event.preventDefault();
+            $(function () {
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Assigned workload'
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: [
+                            'Days',
+                        ],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Hours'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} hours</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Today',
+                        data: [{{ar[0][8]}}]
+                    }, {
+                        name: 'Week',
+                        data: [{{ar[1][8]}}]
+                    }]
+                });
+            });
+        }
+       function tsday(event) {
+            event && event.preventDefault();
+            $(function () {
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Task Status'
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: [
+                            'Tasks',
+                        ],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of tasks'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} tasks</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Not Started',
+                        data: [{{ar[0][1]}}]
+                    }, {
+                        name: 'Progress',
+                        data: [{{ar[0][3]}}]
+                    }, {
+                        name: 'On hold',
+                        data: [{{ar[0][4]}}]
+                    }, {
+                        name: 'Stuck',
+                        data: [{{ar[0][5]}}]
+                    },
+                        {
+                            name: 'Completed',
+                            data: [{{ar[0][2]}}]
+                        }]
+                });
+            });
+        }
+        function tsweek(event) {
+            event && event.preventDefault();
+            $(function () {
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Task Status'
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: [
+                            'Tasks',
+                        ],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of tasks'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} hours</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Not Started',
+                        data: [{{ar[1][1]}}]
+                    }, {
+                        name: 'Progress',
+                        data: [{{ar[1][3]}}]
+                    }, {
+                        name: 'On hold',
+                        data: [{{ar[1][4]}}]
+                    }, {
+                        name: 'Stuck',
+                        data: [{{ar[1][5]}}]
+                    },
+                        {
+                            name: 'Completed',
+                            data: [{{ar[1][2]}}]
+                        }]
+                });
+            });
+        }
+         function crtoday(event) {
+       event && event.preventDefault();
+       $(function () {
+    Highcharts.chart('container', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+        },
+        title: {
+            text: 'Completion<br>Rate',
+            align: 'center',
+            verticalAlign: 'middle',
+            y: 40
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%']
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Completion Rate',
+            innerSize: '50%',
+            data: [
+                ['Completed',   {{ar[0][6]}}],
+                ['Not completed',       100 - {{ar[0][6]}}]
+            ]
+        }]
+    });
+});
+
+
+
+   }
+        function crweek(event) {
+            event && event.preventDefault();
+           $(function () {
+    Highcharts.chart('container', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+        },
+        title: {
+            text: 'Completion<br>Rate',
+            align: 'center',
+            verticalAlign: 'middle',
+            y: 40
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%']
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Completion Rate',
+            innerSize: '50%',
+            data: [
+                ['Completed',   {{ar[1][6]}}],
+                ['Not completed',       100 - {{ar[1][6]}}]
+            ]
+        }]
+    });
+});
+
+
+
+        }
+
+    </script>
+
+</head>
+<body onload="duedate(event)">
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">{{dn}}</a>
+    </div>
+    <ul class ="nav navbar-nav" style = "padding-left: 250px;">
+        <li><a href="single.html" onclick="duedate(event)">Due Date</a></li>
+      <li><a href="single.html" onclick="Workload(event)">Assigned WorkLoad</a></li>
+         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Task Status <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="single.html" onclick="tsday(event)">Today</a></li>
+          <li><a href="single.html" onclick="tsweek(event)">Week</a></li>
+        </ul>
+      </li>
+         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Completion Rate<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="single.html" onclick="crtoday(event)">Today</a></li>
+          <li><a href="single.html" onclick="crweek(event)">Week</a></li>
+        </ul>
+      </li>
+    </ul>
+     <ul class="nav navbar-nav navbar-right">
+         <li><button class="btn btn-danger navbar-btn" onclick="myFunction()">Logout</button></li>
+    </ul>
+  </div>
+</nav>
+
+
+
+    <!-- <h3 style = "margin: 20px 10px 10px 10px;">{{dn}}</h3>-->
+
+    <!--<button type="button" class="btn btn-danger"  onclick="logout()" style = "margin: 20px 10px 10px 10px;">Logout</button> -->
+
+    <div class="w3-sidenav  w3-medium w3-grey" style = "padding-top: 0px; margin-top: 0px; margin-bottom: 10px; padding-bottom: 10px;">
+
+
+
+         {% for i in s %}
+            <a href="/dashboardTasks?userid={{u[i]}}" class="list-group-item">{{n[i]}}</a>
+            {% endfor %}
+
+
+    </div>
+
+
+
+    <div class="container w3-display-middle">
+    <div id="container" style="width: 550px; height: 400px; margin: 0 auto; padding-left: 100px;"></div>
+
+   <!--<script language="JavaScript">
+    </script> -->
+    </div>
+
+</body>
+
+</html>
